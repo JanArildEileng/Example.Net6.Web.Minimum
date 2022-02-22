@@ -2,6 +2,7 @@ using Swashbuckle.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using MediatR;
+using ExampleMeditor;
 
 
 //Sett om logging med Serilog , uten å bruke Appsetting.json
