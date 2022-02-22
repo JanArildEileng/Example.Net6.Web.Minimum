@@ -1,5 +1,6 @@
 
 using MediatR;
+using ExampleMeditor;
 
 var builder = WebApplication.CreateBuilder(args);
 

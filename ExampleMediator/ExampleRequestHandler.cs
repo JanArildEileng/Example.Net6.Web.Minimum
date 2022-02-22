@@ -1,6 +1,8 @@
 
 using MediatR;
 
+namespace  ExampleMeditor;
+
 public class HelloMediatr : IRequest<string> { }
 
 public class HelloMediatrHandler : IRequestHandler<HelloMediatr, string>
