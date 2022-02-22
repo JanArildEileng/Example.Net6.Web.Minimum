@@ -43,6 +43,12 @@ try {
   
     app.MapGet("/", () => "Hello World , Swagger,Serilog,Mediator!");
     app.MapGet("/HelloMediatr", async(IMediator mediator ) => await mediator.Send(new HelloMediatr()) );
+    app.MapGet("/Ping", async(IMediator mediator ) =>{
+            await mediator.Publish(new Ping());
+            return "Pong";
+    }); 
+
+
 
     app.Run();
 
