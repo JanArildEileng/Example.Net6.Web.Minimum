@@ -1,8 +1,7 @@
 using Swashbuckle.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
-
-
+using MediatR;
 
 
 //Sett om logging med Serilog , uten å bruke Appsetting.json
@@ -24,6 +23,8 @@ try {
                 .CreateLogger();
 
     builder.Host.UseSerilog(serilogger);  //kun bruk Serilog til logging
+    builder.Services.AddMediatR(typeof(HelloMediatrHandler));
+
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(c =>
     {
@@ -39,7 +40,9 @@ try {
 
 
   
-    app.MapGet("/", () => "Hello World , Swagger,Serilog!");
+    app.MapGet("/", () => "Hello World , Swagger,Serilog,Mediator!");
+    app.MapGet("/HelloMediatr", async(IMediator mediator ) => await mediator.Send(new HelloMediatr()) );
+
     app.Run();
 
 } catch (Exception ex)  {
