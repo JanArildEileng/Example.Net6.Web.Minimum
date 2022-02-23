@@ -8,3 +8,14 @@ https://andrewlock.net/exploring-dotnet-6-part-2-comparing-webapplicationbuilder
 
 #mediatR
 https://github.com/jbogard/MediatR/wiki#aspnet-core-or-net-core-in-general
+
+
+#EF Core
+dotnet tool install --global dotnet-ef
+dotnet tool update --global dotnet-ef
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet ef migrations add InitialCreate  -o Context/Migrations
+dotnet ef database update
+
+#SqlLite
+

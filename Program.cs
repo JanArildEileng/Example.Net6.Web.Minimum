@@ -2,7 +2,11 @@ using Swashbuckle.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ExampleMeditor;
+using ExampleContext;
+using Microsoft.EntityFrameworkCore.Storage;
+
 
 
 //Sett om logging med Serilog , uten å bruke Appsetting.json
@@ -33,6 +37,10 @@ try {
     });
 
 
+//using var context = new ExampleDbContext(_contextOptions);
+    builder.Services.AddDbContext<ExampleDbContext>(op=>op.UseSqlite($"Data Source=.\\Context\\Test.db") );
+
+    
 
     var app=builder.Build();
 
@@ -46,13 +54,35 @@ try {
     app.MapGet("/Ping", async(IMediator mediator ) =>{
             await mediator.Publish(new Ping());
             return "Pong";
-    }); 
+    });
 
 
+
+    app.MapGet("/Db/ExampleEntity", async(ExampleDbContext context) =>
+    {
+        return  await context.ExampleEntity!.ToListAsync();
+    });
+    
+    app.MapPost("/Db/ExampleEntity", async(ExampleEntity exampleEntity, ExampleDbContext context) =>
+    {
+        context.ExampleEntity!.Add(exampleEntity);
+        context.SaveChanges();
+        return  await context.ExampleEntity!.ToListAsync();
+    });
+   
 
     app.Run();
 
+
 } catch (Exception ex)  {
+  
+    string type = ex.GetType().Name;
+   if (type.Equals("StopTheHostException", StringComparison.Ordinal))
+   {
+      throw;
+   }
+
+
      Log.Error(ex, "Something went wrong");
 }  finally  {
     Log.Information("Goodbye,Serilog!");
