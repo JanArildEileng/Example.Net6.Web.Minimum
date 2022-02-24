@@ -1,11 +1,15 @@
+using Serilog;
 using Swashbuckle.AspNetCore;
 using Microsoft.OpenApi.Models;
-using Serilog;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ExampleMeditor;
 using ExampleContext;
 using Microsoft.EntityFrameworkCore.Storage;
+
+
+
+
 
 
 
@@ -28,13 +32,14 @@ try {
                 .CreateLogger();
 
     builder.Host.UseSerilog(serilogger);  //kun bruk Serilog til logging
-    builder.Services.AddMediatR(typeof(HelloMediatrHandler));
-
+   
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });                
     });
+    builder.Services.AddMediatR(typeof(HelloMediatrHandler));
+
 
     builder.Services.AddAutoMapper(typeof(AutoMapperProfiles.TestProfile));
 
@@ -75,6 +80,13 @@ try {
         return  mapper.Map<AutoMapperProfiles.ToTestClass>(from);
     });
 
+    app.MapGet("/", () => "Hello World with Swagger!");
+    app.MapGet("/", () => "Hello MediatR!");
+    app.MapGet("/HelloMediatr", async(IMediator mediator ) => await mediator.Send(new HelloMediatr()) );
+    app.MapGet("/Ping", async(IMediator mediator ) =>{
+            await mediator.Publish(new Ping());
+            return "Pong";
+    }); 
 
     app.Run();
 
@@ -86,8 +98,6 @@ try {
    {
       throw;
    }
-
-
      Log.Error(ex, "Something went wrong");
 }  finally  {
     Log.Information("Goodbye,Serilog!");
