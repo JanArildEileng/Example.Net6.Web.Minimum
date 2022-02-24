@@ -11,6 +11,8 @@ https://github.com/jbogard/MediatR/wiki#aspnet-core-or-net-core-in-general
 
 
 #EF Core
+https://docs.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli
+
 dotnet tool install --global dotnet-ef
 dotnet tool update --global dotnet-ef
 dotnet add package Microsoft.EntityFrameworkCore.Design
@@ -19,3 +21,6 @@ dotnet ef database update
 
 #SqlLite
 
+
+#Automapper
+https://docs.automapper.org/en/latest/Getting-started.html

@@ -36,16 +36,16 @@ try {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });                
     });
 
+    builder.Services.AddAutoMapper(typeof(AutoMapperProfiles.TestProfile));
 
 //using var context = new ExampleDbContext(_contextOptions);
     builder.Services.AddDbContext<ExampleDbContext>(op=>op.UseSqlite($"Data Source=.\\Context\\Test.db") );
-
-    
 
     var app=builder.Build();
 
     app.UseSwagger((option)=>{
     }).UseSwaggerUI();
+
 
 
   
@@ -70,6 +70,11 @@ try {
         return  await context.ExampleEntity!.ToListAsync();
     });
    
+    app.MapPost("/Automapper", (AutoMapperProfiles.FromTestClass from, AutoMapper.IMapper mapper) =>
+    {
+        return  mapper.Map<AutoMapperProfiles.ToTestClass>(from);
+    });
+
 
     app.Run();
 
